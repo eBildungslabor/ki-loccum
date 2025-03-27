@@ -1,54 +1,65 @@
 document.addEventListener("DOMContentLoaded", function () {
-    // Code für die index.html (Startseite)
-    const form = document.getElementById('inputForm');
+    // Formularverarbeitung auf den Eingabeseiten
+    const form = document.getElementById('challengeForm');
     if (form) {
         form.addEventListener('submit', function (event) {
             event.preventDefault();
 
-            // Eingabedaten sammeln
-            const topic = document.getElementById('topic').value;
-            const understanding = document.getElementById('understanding').value;
-            const skills = document.getElementById('skills').value;
-            const reflection = document.getElementById('reflection').value;
+            const challenge = document.getElementById('challenge').value;
+            localStorage.setItem('challenge', challenge);
 
-            // Daten im lokalen Speicher speichern
-            localStorage.setItem('topic', topic);
-            localStorage.setItem('understanding', understanding);
-            localStorage.setItem('skills', skills);
-            localStorage.setItem('reflection', reflection);
-
-            // Weiter zur Ergebnis-Seite
-            window.location.href = 'result.html';
+            const target = form.getAttribute('data-target');
+            if (target) {
+                window.location.href = target;
+            }
         });
     }
 
-    // Code für die result.html (Ergebnis-Seite)
-    const outputTopic = document.getElementById('outputTopic');
-    const outputUnderstanding = document.getElementById('outputUnderstanding');
-    const outputSkills = document.getElementById('outputSkills');
-    const outputReflection = document.getElementById('outputReflection');
+    // Ergebnisverarbeitung auf den Result-Seiten
+    const resultOutput = document.getElementById('resultText');
     const copyButton = document.getElementById('copyButton');
 
-    if (outputTopic && outputUnderstanding && outputSkills && outputReflection) {
-        // Daten aus dem lokalen Speicher holen
-        const topic = localStorage.getItem('topic');
-        const understanding = localStorage.getItem('understanding');
-        const skills = localStorage.getItem('skills');
-        const reflection = localStorage.getItem('reflection');
+    if (resultOutput) {
+        const challenge = localStorage.getItem('challenge') || '[keine Herausforderung eingegeben]';
+        const page = window.location.pathname;
+        let prompt = '';
 
-        // Daten in die HTML-Elemente einsetzen
-        outputTopic.textContent = topic;
-        outputUnderstanding.textContent = understanding;
-        outputSkills.textContent = skills;
-        outputReflection.textContent = reflection;
+        if (page.includes('result-herausforderung.html')) {
+            // Prompt für sokratischen Dialog
+            prompt = `Beginne einen sokratischen Dialog zum folgenden Thema: ${challenge}.
+Stelle mir eine erste kluge, vertiefende Frage.
+Warte dann auf meine Antwort.
+Erst danach stellst du die nächste Frage – offen, nachdenklich, anregend.
+Gib keine Antworten, sondern unterstütze mich dabei, durch deine Fragen eigene Einsichten zu entwickeln.
+Wiederhole diesen Prozess, bis ich den Dialog beende.`;
+        } else if (page.includes('result-e1.html')) {
+            // Prompt für Spiel-PingPong
+            prompt = `Wir spielen ein kreatives Ideen-PingPong.
+Die Herausforderung lautet: ${challenge}.
+Du beginnst, indem du mich bittest, eine erste Idee in Stichpunkten zu nennen.
+Erst danach nennst du selbst eine Idee.
+Dann forderst du mich direkt zur nächsten Idee auf – und so weiter.
+Die Ideen sollen möglichst kurz, überraschend und unterschiedlich sein.
+Wiederhole den Wechsel so lange, bis ich aufhöre zu spielen.`;
+        } else if (page.includes('result-methoden.html')) {
+            // Prompt für SCAMPER-Methode
+            prompt = `Nutze die SCAMPER-Methode, um kreative Ideen zur folgenden Herausforderung zu entwickeln:
+"${challenge}"
+Für jeden der sieben SCAMPER-Schritte (Substitute, Combine, Adapt, Modify, Put to another use, Eliminate, Reverse)
+sollst du jeweils drei kurze, ungewöhnliche und kreative Ideen liefern.
+Liste die Ideen geordnet nach den SCAMPER-Buchstaben auf.`;
+
+        }
+
+        resultOutput.textContent = prompt;
     }
 
-    // Kopierfunktion
+    // Kopieren ermöglichen
     if (copyButton) {
         copyButton.addEventListener('click', function () {
-            const resultText = document.getElementById('resultText').innerText;
-            navigator.clipboard.writeText(resultText).then(() => {
-                alert('Text wurde kopiert!');
+            const textToCopy = document.getElementById('resultText').innerText;
+            navigator.clipboard.writeText(textToCopy).then(() => {
+                alert('Prompt wurde kopiert!');
             }).catch(err => {
                 console.error('Kopieren fehlgeschlagen: ', err);
             });
