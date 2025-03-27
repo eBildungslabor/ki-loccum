@@ -24,16 +24,8 @@ document.addEventListener("DOMContentLoaded", function () {
         const page = window.location.pathname;
         let prompt = '';
 
-        if (page.includes('result-herausforderung.html')) {
-            // Prompt für sokratischen Dialog
-            prompt = `Beginne einen sokratischen Dialog zum folgenden Thema: ${challenge}.
-Stelle mir eine erste kluge, vertiefende Frage.
-Warte dann auf meine Antwort.
-Erst danach stellst du die nächste Frage – offen, nachdenklich, anregend.
-Gib keine Antworten, sondern unterstütze mich dabei, durch deine Fragen eigene Einsichten zu entwickeln.
-Wiederhole diesen Prozess, bis ich den Dialog beende.`;
-        } else if (page.includes('result-e1.html')) {
-            // Prompt für Spiel-PingPong
+        if (page.includes('e1-result.html')) {
+            // Prompt für Ideen-PingPong
             prompt = `Wir spielen ein kreatives Ideen-PingPong.
 Die Herausforderung lautet: ${challenge}.
 Du beginnst, indem du mich bittest, eine erste Idee in Stichpunkten zu nennen.
@@ -41,14 +33,36 @@ Erst danach nennst du selbst eine Idee.
 Dann forderst du mich direkt zur nächsten Idee auf – und so weiter.
 Die Ideen sollen möglichst kurz, überraschend und unterschiedlich sein.
 Wiederhole den Wechsel so lange, bis ich aufhöre zu spielen.`;
-        } else if (page.includes('result-methoden.html')) {
+        } else if (page.includes('e2-result.html')) {
+            // Prompt für sokratischen Dialog
+            prompt = `Beginne einen sokratischen Dialog zum folgenden Thema: ${challenge}.
+Stelle mir eine erste kluge, vertiefende Frage.
+Warte dann auf meine Antwort.
+Erst danach stellst du die nächste Frage – offen, nachdenklich, anregend.
+Gib keine Antworten, sondern unterstütze mich dabei, durch deine Fragen eigene Einsichten zu entwickeln.
+Wiederhole diesen Prozess, bis ich den Dialog beende.`;
+        } else if (page.includes('e5-result.html')) {
             // Prompt für SCAMPER-Methode
             prompt = `Nutze die SCAMPER-Methode, um kreative Ideen zur folgenden Herausforderung zu entwickeln:
 "${challenge}"
 Für jeden der sieben SCAMPER-Schritte (Substitute, Combine, Adapt, Modify, Put to another use, Eliminate, Reverse)
 sollst du jeweils drei kurze, ungewöhnliche und kreative Ideen liefern.
 Liste die Ideen geordnet nach den SCAMPER-Buchstaben auf.`;
-
+        } else if (page.includes('result-herausforderung.html')) {
+            // Fallback: sokratischer Dialog (alte Seite)
+            prompt = `Beginne einen sokratischen Dialog zum folgenden Thema: ${challenge}.
+Stelle mir eine erste kluge, vertiefende Frage.
+Warte dann auf meine Antwort.
+Erst danach stellst du die nächste Frage – offen, nachdenklich, anregend.
+Gib keine Antworten, sondern unterstütze mich dabei, durch deine Fragen eigene Einsichten zu entwickeln.
+Wiederhole diesen Prozess, bis ich den Dialog beende.`;
+        } else if (page.includes('result-methoden.html')) {
+            // Fallback: SCAMPER (alte Seite)
+            prompt = `Nutze die SCAMPER-Methode, um kreative Ideen zur folgenden Herausforderung zu entwickeln:
+"${challenge}"
+Für jeden der sieben SCAMPER-Schritte (Substitute, Combine, Adapt, Modify, Put to another use, Eliminate, Reverse)
+sollst du jeweils drei kurze, ungewöhnliche und kreative Ideen liefern.
+Liste die Ideen geordnet nach den SCAMPER-Buchstaben auf.`;
         }
 
         resultOutput.textContent = prompt;
